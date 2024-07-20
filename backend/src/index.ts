@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import Database from "./config/database";
 import CryptoCurrenciesRouter from "./router/CryptoCurrenciesRouter";
+import './jobs/updatePrice'
 
 class App {
   public app: Application;

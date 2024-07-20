@@ -16,7 +16,7 @@ class CryptocurrenciesConroller {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { name, symbol, price } = req.body;
+                const { name, symbol } = req.body;
                 const existingCrypto = yield cryptocurrencies_1.Cryptocurrencies.findOne({
                     where: {
                         [sequelize_1.Op.or]: [{ name }, { symbol }],
