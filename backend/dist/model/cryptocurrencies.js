@@ -16,6 +16,8 @@ const CRYPTOCURRENCY_ID = "id";
 const CRYPTOCURRENCY_NAME = "name";
 const CRYPTOCURRENCY_SYMBOL = "symbol";
 const CRYPTOCURRENCY_PRICE = "price";
+const CRYPTOCURRENCY_CREATED_AT = "createdAt";
+const CRYPTOCURRENCY_UPDATED_AT = "updatedAt";
 let Cryptocurrencies = class Cryptocurrencies extends sequelize_typescript_1.Model {
 };
 exports.Cryptocurrencies = Cryptocurrencies;
@@ -24,6 +26,8 @@ Cryptocurrencies.CRYPTOCURRENCY_ID = CRYPTOCURRENCY_ID;
 Cryptocurrencies.CRYPTOCURRENCY_NAME = CRYPTOCURRENCY_NAME;
 Cryptocurrencies.CRYPTOCURRENCY_SYMBOL = CRYPTOCURRENCY_SYMBOL;
 Cryptocurrencies.CRYPTOCURRENCY_PRICE = CRYPTOCURRENCY_PRICE;
+Cryptocurrencies.CRYPTOCURRENCY_CREATED_AT = CRYPTOCURRENCY_CREATED_AT;
+Cryptocurrencies.CRYPTOCURRENCY_UPDATED_AT = CRYPTOCURRENCY_UPDATED_AT;
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
@@ -54,6 +58,22 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], Cryptocurrencies.prototype, "price", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.DATE,
+        defaultValue: sequelize_typescript_1.DataType.NOW,
+        field: CRYPTOCURRENCY_CREATED_AT,
+    }),
+    __metadata("design:type", Date)
+], Cryptocurrencies.prototype, "createdAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.DATE,
+        defaultValue: sequelize_typescript_1.DataType.NOW,
+        field: CRYPTOCURRENCY_UPDATED_AT,
+    }),
+    __metadata("design:type", Date)
+], Cryptocurrencies.prototype, "updatedAt", void 0);
 exports.Cryptocurrencies = Cryptocurrencies = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: CRYPTOCURRENCY_TABLE_NAME,

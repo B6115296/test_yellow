@@ -5,6 +5,8 @@ const CRYPTOCURRENCY_ID = "id";
 const CRYPTOCURRENCY_NAME = "name";
 const CRYPTOCURRENCY_SYMBOL = "symbol";
 const CRYPTOCURRENCY_PRICE = "price";
+const CRYPTOCURRENCY_CREATED_AT = "createdAt";
+const CRYPTOCURRENCY_UPDATED_AT = "updatedAt";
 
 @Table({
   tableName: CRYPTOCURRENCY_TABLE_NAME,
@@ -15,6 +17,8 @@ export class Cryptocurrencies extends Model {
   public static CRYPTOCURRENCY_NAME = CRYPTOCURRENCY_NAME;
   public static CRYPTOCURRENCY_SYMBOL = CRYPTOCURRENCY_SYMBOL;
   public static CRYPTOCURRENCY_PRICE = CRYPTOCURRENCY_PRICE;
+  public static CRYPTOCURRENCY_CREATED_AT = CRYPTOCURRENCY_CREATED_AT;
+  public static CRYPTOCURRENCY_UPDATED_AT = CRYPTOCURRENCY_UPDATED_AT;
 
   @Column({
     type: DataType.INTEGER,
@@ -42,4 +46,17 @@ export class Cryptocurrencies extends Model {
   })
   price!: number;
 
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
+    field: CRYPTOCURRENCY_CREATED_AT,
+  })
+  createdAt!: Date;
+
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW,
+    field: CRYPTOCURRENCY_UPDATED_AT,
+  })
+  updatedAt!: Date;
 }
