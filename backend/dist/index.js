@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./config/database"));
 const cors_1 = __importDefault(require("cors"));
 const CryptoCurrenciesRouter_1 = __importDefault(require("./router/CryptoCurrenciesRouter"));
-// import "./jobs/updatePrice";
+require("./jobs/updatePrice");
 class App {
     constructor() {
         this.app = (0, express_1.default)();
