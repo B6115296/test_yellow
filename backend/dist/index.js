@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./config/database"));
+const cors_1 = __importDefault(require("cors"));
 const CryptoCurrenciesRouter_1 = __importDefault(require("./router/CryptoCurrenciesRouter"));
-require("./jobs/updatePrice");
+// import "./jobs/updatePrice";
 class App {
     constructor() {
         this.app = (0, express_1.default)();
@@ -15,6 +16,7 @@ class App {
         this.routes();
     }
     plugins() {
+        this.app.use((0, cors_1.default)());
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
     }

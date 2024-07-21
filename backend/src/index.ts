@@ -1,7 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import Database from "./config/database";
+import cors from "cors";
 import CryptoCurrenciesRouter from "./router/CryptoCurrenciesRouter";
-import './jobs/updatePrice'
+import "./jobs/updatePrice";
 
 class App {
   public app: Application;
@@ -14,6 +15,7 @@ class App {
   }
 
   protected plugins(): void {
+    this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }

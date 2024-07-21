@@ -10,7 +10,7 @@ const validate_1 = __importDefault(require("../helper/validate"));
 class CryptocurrenciesRouter extends BaseRouter_1.default {
     routes() {
         this.router.post("", (0, validate_1.default)(cryptocurrenciesSchema_1.createCryptoSchema), cryptocurrenciesController_1.default.create);
-        this.router.patch("/:id", (0, validate_1.default)(cryptocurrenciesSchema_1.updateCryptoSchema), cryptocurrenciesController_1.default.update);
+        this.router.put("/:id", (0, validate_1.default)(cryptocurrenciesSchema_1.updateCryptoSchema), cryptocurrenciesController_1.default.update);
         this.router.delete("/:id", cryptocurrenciesController_1.default.delete);
         this.router.get("/", cryptocurrenciesController_1.default.findAll);
         this.router.get("/:id", cryptocurrenciesController_1.default.findById);

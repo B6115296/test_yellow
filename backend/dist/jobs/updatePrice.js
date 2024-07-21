@@ -1,5 +1,4 @@
 "use strict";
-// updatePrice.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -24,14 +23,13 @@ class SymbolNotFoundError extends Error {
         this.name = "SymbolNotFoundError";
     }
 }
-// Function to update cryptocurrency prices
 function updatePrices() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const cryptocurrencies = yield cryptocurrencies_1.Cryptocurrencies.findAll();
             for (let crypto of cryptocurrencies) {
                 try {
-                    const updatedPrice = yield fetchUpdatedPriceFromBinance(crypto.symbol);
+                    const updatedPrice = yield fetchUpdatedPriceFromAPI(crypto.symbol);
                     crypto.price = updatedPrice;
                     yield crypto.save();
                     console.log(`Updated price for ${crypto.symbol}: ${updatedPrice}`);
@@ -52,8 +50,7 @@ function updatePrices() {
         }
     });
 }
-// Function to fetch updated price from Binance API
-function fetchUpdatedPriceFromBinance(symbol) {
+function fetchUpdatedPriceFromAPI(symbol) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const apiUrl = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}USDT`;

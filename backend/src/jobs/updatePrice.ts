@@ -1,5 +1,3 @@
-// updatePrice.ts
-
 import cron from "node-cron";
 import axios from "axios";
 import Database from "../config/database";
@@ -14,14 +12,13 @@ class SymbolNotFoundError extends Error {
   }
 }
 
-// Function to update cryptocurrency prices
 async function updatePrices() {
   try {
     const cryptocurrencies = await Cryptocurrencies.findAll();
 
     for (let crypto of cryptocurrencies) {
       try {
-        const updatedPrice = await fetchUpdatedPriceFromBinance(crypto.symbol);
+        const updatedPrice = await fetchUpdatedPriceFromAPI(crypto.symbol);
         crypto.price = updatedPrice;
         await crypto.save();
         console.log(`Updated price for ${crypto.symbol}: ${updatedPrice}`);
@@ -42,8 +39,7 @@ async function updatePrices() {
   }
 }
 
-// Function to fetch updated price from Binance API
-async function fetchUpdatedPriceFromBinance(symbol: string): Promise<number> {
+async function fetchUpdatedPriceFromAPI(symbol: string): Promise<number> {
   try {
     const apiUrl = `https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}USDT`;
     const response = await axios.get(apiUrl);

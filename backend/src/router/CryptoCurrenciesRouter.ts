@@ -10,7 +10,7 @@ class CryptocurrenciesRouter extends BaseRoutes {
       validate(createCryptoSchema),
       CryptocurrenciesConroller.create
     );
-    this.router.patch(
+    this.router.put(
       "/:id",
       validate(updateCryptoSchema),
       CryptocurrenciesConroller.update
