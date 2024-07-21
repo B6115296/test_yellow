@@ -8,7 +8,6 @@ export interface Cryptocurrencies {
   id: string;
   name: string;
   symbol: string;
-  image: string;
   price: number;
 }
 

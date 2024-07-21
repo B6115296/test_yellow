@@ -30,7 +30,7 @@ function UpdateCurrency({ params }: { params: { id: string } }) {
       newErrors.symbol = "Symbol must be in uppercase.";
     }
 
-    if (isNaN(newPrice) || newPrice <= 0) {
+    if (isNaN(newPrice) || newPrice < 0) {
       newErrors.price = "Price must be a positive decimal number.";
     }
 

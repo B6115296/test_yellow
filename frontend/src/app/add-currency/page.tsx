@@ -25,7 +25,7 @@ function AddCurrency() {
       newErrors.symbol = "Symbol must be in uppercase.";
     }
 
-    if (isNaN(price) || price <= 0) {
+    if (isNaN(price) || price < 0) {
       newErrors.price = "Price must be a positive decimal number.";
     }
 
