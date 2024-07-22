@@ -78,7 +78,9 @@ export class CrypToRepo implements ICryptoRepo {
 
   async retriveAll(): Promise<Cryptocurrencies[]> {
     try {
-      const new_crypto = await Cryptocurrencies.findAll({});
+      const new_crypto = await Cryptocurrencies.findAll({
+        order: [["id", "ASC"]],
+      });
       if (!new_crypto) {
         throw new Error("Crypto not found");
       }

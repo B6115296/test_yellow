@@ -88,7 +88,9 @@ class CrypToRepo {
     retriveAll() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const new_crypto = yield cryptocurrencies_1.Cryptocurrencies.findAll({});
+                const new_crypto = yield cryptocurrencies_1.Cryptocurrencies.findAll({
+                    order: [["id", "ASC"]],
+                });
                 if (!new_crypto) {
                     throw new Error("Crypto not found");
                 }
