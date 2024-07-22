@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <main className="container mx-auto my-3">
-      <h1 className="text-5xl font-bold">Cryptocurrencies</h1>
+      <h1 className="text-5xl font-bold">Cryptocurrency Price Tracker</h1>
       <hr className="my-3"></hr>
       <div className="flex justify-end">
         <button className="bg-green-500 text-white rounded py-2 px-4 my-3 text-lg justify-center items-center hover:bg-green-700">
