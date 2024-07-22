@@ -46,5 +46,5 @@ of various cryptocurrencies.
     POSTGRES_DB=postgres
 
 4. **Start the Server**
-    - frontend -> yarn dev
-    - backend -> yarn start-dev
+    - frontend -> yarn dev (on port 3000)
+    - backend -> yarn start-dev (on port 8000)
