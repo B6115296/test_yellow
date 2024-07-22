@@ -1,14 +1,13 @@
 import { Sequelize } from "sequelize-typescript";
-import { Cryptocurrencies } from "../model/cryptocurrencies";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
+import { Cryptocurrencies } from "../model/cryptocurrencies";
 
 dotenv.config();
 
 class Database {
   public sequelize: Sequelize | undefined;
-  private static initialized = false;
 
   private POSTGRES_DB = process.env.POSTGRES_DB as string;
   private POSTGRES_HOST = process.env.POSTGRES_HOST as string;
@@ -40,6 +39,7 @@ class Database {
       port: this.POSTGRES_PORT,
       dialect: "postgres",
       models: [Cryptocurrencies],
+      logging: console.log,
     });
 
     sequelize
@@ -48,63 +48,39 @@ class Database {
         console.log(
           "✅ PostgreSQL Connection has been established successfully."
         );
-
-        this.syncModels(sequelize);
       })
       .catch((err) => {
         console.error("❌ Unable to connect to the PostgreSQL database:", err);
       });
+
     return sequelize;
   }
 
-  private async syncModels(sequelize: Sequelize) {
-    try {
-      await sequelize.sync({ alter: true });
-      console.log("✅ Database synced successfully.");
-
-      if (!Database.initialized) {
-        await this.insertDefaultDataIfNeeded();
-        Database.initialized = true;
-      }
-    } catch (error) {
-      console.error("❌ Error syncing database:", error);
+  public async importData(): Promise<void> {
+    if (!this.sequelize) {
+      throw new Error("Database connection not established.");
     }
-  }
+    const [results]: any = await this.sequelize.query(
+      `SELECT COUNT(*) FROM "cryptocurrency"`
+    );
+    const count = parseInt(results[0].count, 10);
 
-  private async insertDefaultDataIfNeeded() {
-    if (!this.sequelize) return;
-
-    try {
-      const count = await Cryptocurrencies.count();
-
-      if (count === 0) {
-        console.log("✅ Table is empty. Inserting default data.");
-        this.executeSQLScript();
-      } else {
-        console.log(
-          "✅ Table already contains data. No default data inserted."
-        );
-      }
-    } catch (error) {
-      console.error(
-        "❌ Error checking table or inserting default data:",
-        error
-      );
+    if (count > 0) {
+      console.log("✅ Data already exists, skipping import.");
+      return;
     }
-  }
 
-  private async executeSQLScript() {
-    if (!this.sequelize) return;
+    const sqlFilePath = path.resolve(
+      __dirname,
+      "default_cryptocurrencies_data.sql"
+    );
+    const sql = fs.readFileSync(sqlFilePath, "utf8");
 
     try {
-      const sqlFilePath = path.join(__dirname, "insert_default_data.sql");
-
-      const sql = fs.readFileSync(sqlFilePath, "utf-8");
-
       await this.sequelize.query(sql);
-      console.log("✅ Default data inserted successfully.");
-    } catch (error) {
-      console.error("❌ Error executing SQL script:", error);
+      console.log("Data imported successfully!");
+    } catch (err) {
+      console.error("Error importing data:", err);
     }
   }
 }

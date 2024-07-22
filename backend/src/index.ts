@@ -20,9 +20,10 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
   }
 
-  protected databaseSync(): void {
+  protected async databaseSync(): Promise<void> {
     const db = new Database();
-    db.sequelize?.sync();
+    await db.sequelize?.sync();
+    await db.importData();
   }
 
   protected routes(): void {

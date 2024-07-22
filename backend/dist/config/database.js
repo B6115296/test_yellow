@@ -33,10 +33,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-const cryptocurrencies_1 = require("../model/cryptocurrencies");
 const dotenv = __importStar(require("dotenv"));
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
+const cryptocurrencies_1 = require("../model/cryptocurrencies");
 dotenv.config();
 class Database {
     constructor() {
@@ -63,67 +63,39 @@ class Database {
             port: this.POSTGRES_PORT,
             dialect: "postgres",
             models: [cryptocurrencies_1.Cryptocurrencies],
+            logging: console.log,
         });
         sequelize
             .authenticate()
             .then(() => {
             console.log("✅ PostgreSQL Connection has been established successfully.");
-            this.syncModels(sequelize);
         })
             .catch((err) => {
             console.error("❌ Unable to connect to the PostgreSQL database:", err);
         });
         return sequelize;
     }
-    syncModels(sequelize) {
+    importData() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield sequelize.sync({ alter: true });
-                console.log("✅ Database synced successfully.");
-                if (!Database.initialized) {
-                    yield this.insertDefaultDataIfNeeded();
-                    Database.initialized = true;
-                }
+            if (!this.sequelize) {
+                throw new Error("Database connection not established.");
             }
-            catch (error) {
-                console.error("❌ Error syncing database:", error);
-            }
-        });
-    }
-    insertDefaultDataIfNeeded() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.sequelize)
+            const [results] = yield this.sequelize.query(`SELECT COUNT(*) FROM "cryptocurrency"`);
+            const count = parseInt(results[0].count, 10);
+            if (count > 0) {
+                console.log("✅ Data already exists, skipping import.");
                 return;
-            try {
-                const count = yield cryptocurrencies_1.Cryptocurrencies.count();
-                if (count === 0) {
-                    console.log("✅ Table is empty. Inserting default data.");
-                    this.executeSQLScript();
-                }
-                else {
-                    console.log("✅ Table already contains data. No default data inserted.");
-                }
             }
-            catch (error) {
-                console.error("❌ Error checking table or inserting default data:", error);
-            }
-        });
-    }
-    executeSQLScript() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.sequelize)
-                return;
+            const sqlFilePath = path.resolve(__dirname, "default_cryptocurrencies_data.sql");
+            const sql = fs.readFileSync(sqlFilePath, "utf8");
             try {
-                const sqlFilePath = path.join(__dirname, "insert_default_data.sql");
-                const sql = fs.readFileSync(sqlFilePath, "utf-8");
                 yield this.sequelize.query(sql);
-                console.log("✅ Default data inserted successfully.");
+                console.log("Data imported successfully!");
             }
-            catch (error) {
-                console.error("❌ Error executing SQL script:", error);
+            catch (err) {
+                console.error("Error importing data:", err);
             }
         });
     }
 }
-Database.initialized = false;
 exports.default = Database;
