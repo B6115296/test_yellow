@@ -38,8 +38,6 @@ function UpdateCurrency({ params }: { params: { id: string } }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  console.log("cryptocurrencyData", cryptocurrencyData);
-
   const getCrytoById = async (id: string) => {
     try {
       const res = await axios.get(
@@ -81,8 +79,6 @@ function UpdateCurrency({ params }: { params: { id: string } }) {
           price: newPrice,
         }
       );
-
-      console.log(res);
 
       if (res.status !== 200) {
         throw new Error("Failed to update cryptocurrency");

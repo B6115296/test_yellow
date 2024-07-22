@@ -16,8 +16,6 @@ export default function Home() {
     Cryptocurrencies[]
   >([]);
 
-  console.log(cryptocurrencyList);
-
   const getCryptocurrencies = async () => {
     try {
       const res = await axios.get(
@@ -35,6 +33,12 @@ export default function Home() {
 
   useEffect(() => {
     getCryptocurrencies();
+
+    const intervalId = setInterval(() => {
+      getCryptocurrencies();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -42,11 +46,10 @@ export default function Home() {
       <h1 className="text-5xl font-bold">Cryptocurrencies</h1>
       <hr className="my-3"></hr>
       <div className="flex justify-end">
-      <button className="bg-green-500 text-white rounded py-2 px-4 my-3 text-lg justify-center items-center hover:bg-green-700">
-        <Link href="/add-currency">Add Cryptocurrency</Link>
-      </button>
+        <button className="bg-green-500 text-white rounded py-2 px-4 my-3 text-lg justify-center items-center hover:bg-green-700">
+          <Link href="/add-currency">Add Cryptocurrency</Link>
+        </button>
       </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-3 gap-5">
         {cryptocurrencyList && cryptocurrencyList.length > 0 ? (
           cryptocurrencyList.map((val) => (
