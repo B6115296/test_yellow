@@ -68,20 +68,20 @@ class Database {
             .authenticate()
             .then(() => {
             console.log("✅ PostgreSQL Connection has been established successfully.");
+            this.syncModels(sequelize);
         })
             .catch((err) => {
             console.error("❌ Unable to connect to the PostgreSQL database:", err);
         });
-        this.syncModels(sequelize);
         return sequelize;
     }
     syncModels(sequelize) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield sequelize.sync({ force: false });
+                yield sequelize.sync({ alter: true });
                 console.log("✅ Database synced successfully.");
                 if (!Database.initialized) {
-                    this.insertDefaultDataIfNeeded();
+                    yield this.insertDefaultDataIfNeeded();
                     Database.initialized = true;
                 }
             }
@@ -97,11 +97,11 @@ class Database {
             try {
                 const count = yield cryptocurrencies_1.Cryptocurrencies.count();
                 if (count === 0) {
-                    console.log("Table is empty. Inserting default data.");
-                    yield this.executeSQLScript();
+                    console.log("✅ Table is empty. Inserting default data.");
+                    this.executeSQLScript();
                 }
                 else {
-                    console.log("Table already contains data. No default data inserted.");
+                    console.log("✅ Table already contains data. No default data inserted.");
                 }
             }
             catch (error) {
@@ -115,7 +115,7 @@ class Database {
                 return;
             try {
                 const sqlFilePath = path.join(__dirname, "insert_default_data.sql");
-                const sql = fs.readFileSync(sqlFilePath, "utf8");
+                const sql = fs.readFileSync(sqlFilePath, "utf-8");
                 yield this.sequelize.query(sql);
                 console.log("✅ Default data inserted successfully.");
             }

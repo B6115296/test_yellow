@@ -48,22 +48,22 @@ class Database {
         console.log(
           "✅ PostgreSQL Connection has been established successfully."
         );
+
+        this.syncModels(sequelize);
       })
       .catch((err) => {
         console.error("❌ Unable to connect to the PostgreSQL database:", err);
       });
-
-    this.syncModels(sequelize);
-
     return sequelize;
   }
 
   private async syncModels(sequelize: Sequelize) {
     try {
-      await sequelize.sync({ force: false });
+      await sequelize.sync({ alter: true });
       console.log("✅ Database synced successfully.");
+
       if (!Database.initialized) {
-        this.insertDefaultDataIfNeeded();
+        await this.insertDefaultDataIfNeeded();
         Database.initialized = true;
       }
     } catch (error) {
@@ -78,10 +78,12 @@ class Database {
       const count = await Cryptocurrencies.count();
 
       if (count === 0) {
-        console.log("Table is empty. Inserting default data.");
-        await this.executeSQLScript();
+        console.log("✅ Table is empty. Inserting default data.");
+        this.executeSQLScript();
       } else {
-        console.log("Table already contains data. No default data inserted.");
+        console.log(
+          "✅ Table already contains data. No default data inserted."
+        );
       }
     } catch (error) {
       console.error(
@@ -96,7 +98,9 @@ class Database {
 
     try {
       const sqlFilePath = path.join(__dirname, "insert_default_data.sql");
-      const sql = fs.readFileSync(sqlFilePath, "utf8");
+
+      const sql = fs.readFileSync(sqlFilePath, "utf-8");
+
       await this.sequelize.query(sql);
       console.log("✅ Default data inserted successfully.");
     } catch (error) {
